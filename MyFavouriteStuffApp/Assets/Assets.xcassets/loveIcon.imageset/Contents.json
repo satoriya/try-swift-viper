@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "loveIcon.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

@@ -16,10 +16,25 @@ class MyListViewController: UIViewController, TableViewProtocol {
         tab.translatesAutoresizingMaskIntoConstraints = false
         return tab
     }()
+    
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Refreshing")
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
+    // MARK: - Actions
+    @objc func refresh() {
+        presenter?.refresh()
+    }
+    
+    var presenter: ViewToPresenterListProtocol?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        presenter?.viewDidLoad()
         registerTableView()
     }
 
@@ -37,14 +52,41 @@ class MyListViewController: UIViewController, TableViewProtocol {
     }
 }
 
+extension MyListViewController: PresenterToViewListProtocol{
+    func onFetchSuccess() {
+        self.tableView.reloadData()
+    }
+    
+    func onFetchQuotaFailure(error: String) {
+        
+    }
+    
+    func showLoad() {
+        print("start loading")
+    }
+    
+    func hideLoad() {
+        print("stop loading")
+    }
+    
+    func deselectRow(at indexPath: IndexPath) {
+        self.tableView.deselectRow(at: IndexPath(row: indexPath.row, section: 0), animated: true)
+    }
+    
+    
+}
+
 extension MyListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return presenter?.numberOfRowsInsection() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyListTableViewCell", for: indexPath) as? MyListTableViewCell else { return UITableViewCell() }
+        if let model = presenter?.getMyListData(indexPath: indexPath) {
+            cell.setCellValue(model: model)
+        }
         
         return cell
     }

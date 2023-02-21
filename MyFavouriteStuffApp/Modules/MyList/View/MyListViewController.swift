@@ -29,13 +29,26 @@ class MyListViewController: UIViewController, TableViewProtocol {
         presenter?.refresh()
     }
     
+    // MARK: - Properties
     var presenter: ViewToPresenterListProtocol?
-
+    
+    init(presenter: ViewToPresenterListProtocol) {
+        super.init(nibName: nil, bundle: nil)
+        self.presenter = presenter
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         presenter?.viewDidLoad()
         registerTableView()
+        
+        self.navigationItem.title = "My Favourite Stuff"
+        self.view.backgroundColor = .white
     }
 
     func registerTableView() {
@@ -49,6 +62,7 @@ class MyListViewController: UIViewController, TableViewProtocol {
         ])
         
         self.tableView.register(MyListTableViewCell.self, forCellReuseIdentifier: "MyListTableViewCell")
+        self.tableView.refreshControl = refreshControl
     }
 }
 
@@ -94,4 +108,14 @@ extension MyListViewController: UITableViewDataSource {
     
 }
 
-extension MyListViewController:  UITableViewDelegate {}
+extension MyListViewController:  UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: "MyStuffStoryboard", bundle:nil)
+        if let detail = storyBoard.instantiateViewController(withIdentifier: "MyStuffDetailViewController") as? MyStuffDetailViewController {
+            self.navigationController?.pushViewController(detail, animated: true)
+        }
+        
+    }
+    
+}

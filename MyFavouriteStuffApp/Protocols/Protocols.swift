@@ -6,3 +6,16 @@
 //
 
 import Foundation
+import UIKit
+
+protocol TableViewProtocol {
+    associatedtype TableView
+    var tableView: TableView { get set }
+    
+    func registerTableView()
+}
+
+protocol TableViewCellContract {
+    func registerUI()
+    func setupConstraint()
+}

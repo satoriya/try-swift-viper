@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import UIKit
+
+class MyListRouter: PresenterToRouterListProtocol {
+    var viewController: UIViewController?
+    
+    //Setup for router
+    func pushToQuoteDetail(on view: PresenterToViewListProtocol, with list: MyListModel) {
+        print("meanwhile, no action")
+    }
+}

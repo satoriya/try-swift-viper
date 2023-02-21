@@ -53,6 +53,10 @@ class MyListTableViewCell: UITableViewCell {
         
         registerUI()
     }
+    
+    func setCellValue(model: MyListModel) {
+        self.titleLabel.text = model.title
+    }
 
 }
 

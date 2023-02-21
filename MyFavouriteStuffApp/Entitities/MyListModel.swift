@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct MyListModel {
+    let imageSource, iconSource, title, date: String?
+    let price: Double?
+}

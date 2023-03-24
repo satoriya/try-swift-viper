@@ -38,8 +38,21 @@ class MyStuffDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+    private var viewModel: ListVMProtocolInput?
+
+    override func loadView() {
+        super.loadView()
+        registerTableView()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel?.viewDidLoad()
+    }
+}
+
+extension MyStuffDetailViewController {
+    fileprivate func registerTableView() {
         // ini untuk delegate sama data source nya tableview
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -51,7 +64,6 @@ class MyStuffDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         // Programmatical tableview cel
         self.tableView.register(DetailStuffTableViewCell.self, forCellReuseIdentifier: DetailStuffTableViewCell.id)
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -96,5 +108,26 @@ class MyStuffDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
     }
+}
+
+extension MyStuffDetailViewController: ListVMProtocolOutput {
+    func showData(data: [ListModel]) {
+        
+    }
+    
+    func showError(error: Error) {
+        
+    }
+    
+    func set(viewModel: ListVMProtocolInput) {
+        self.viewModel = viewModel
+    }
+
+    func reloadTableView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
     
 }
